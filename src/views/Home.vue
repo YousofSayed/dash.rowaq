@@ -214,7 +214,6 @@ export default {
         warn.value = "يجب ادخال الرابط";
         return;
       }
-      console.log('ahhh');
       showAndHidePopupCb(false);
       showRCCBtnsCb(false);
 
