@@ -4,11 +4,11 @@
         <div class="container">
             <div class="warn">{{ warn }}</div>
             <div class="success">{{ success }}</div>
-            <input type="text" placeholder="الاسم" v-model="modelsState.name">
-            <input type="text" placeholder="الايميل" v-model="modelsState.email">
-            <input type="text" placeholder="الرقم السري" v-model="modelsState.password">
+            <input type="text" placeholder="الاسم" v-model.trim="modelsState.name">
+            <input type="text" placeholder="الايميل" v-model.trim="modelsState.email">
+            <input type="text" placeholder="الرقم السري" v-model.trim="modelsState.password">
             <div class="permision">
-                <input type="checkbox" name="" id="inpPerm" v-model="modelsState.permissions">
+                <input type="checkbox" name="" id="inpPerm" v-model.trim="modelsState.permissions">
                 <label for="inpPerm">إعطاء الصلاحيات ؟</label>
             </div>
             <div class="btn"><button class="purple" @click="validation">إنشاء</button></div>
@@ -85,7 +85,7 @@ export default {
 
 <style>
 .createUser .container input[type="text"] {
-    padding: 10px;
+    padding: 15px 10px;
     border: none;
     border-bottom: 1.5px solid darkslateblue;
     background-color: #fff;
@@ -93,12 +93,6 @@ export default {
     text-align: right;
     transition: .2s;
     width: 400px;
-}
-
-.createUser .container input[type="text"]:focus {
-    transform: scale(1.1);
-    outline: darkslateblue solid 1px;
-    border: none;
 }
 
 .createUser .container .permision,

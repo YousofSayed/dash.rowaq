@@ -9,16 +9,16 @@
         <div class="success">{{ success }}</div>
       </div>
       <transition name="bounce">
-        <input type="text" placeholder="Email" v-show="showState.showEmail" v-model="modelsState.email" />
+        <input type="text" placeholder="Email" v-show="showState.showEmail" v-model.trim="modelsState.email" />
       </transition>
 
       <transition name="bounce">
-        <input type="text" placeholder="XXXXXXXX" :maxlength="8" v-show="showState.showNumber" v-model="modelsState.code"
+        <input type="text" placeholder="XXXXXXXX" :maxlength="8" v-show="showState.showNumber" v-model.trim="modelsState.code"
           ref="numInp" />
       </transition>
 
       <transition name="bounce">
-        <input type="text" v-show="showState.showNewPass" placeholder="New password" v-model="modelsState.password" />
+        <input type="text" v-show="showState.showNewPass" placeholder="New password" v-model.trim="modelsState.password" />
       </transition>
       <button type="submit" @click="addClickClass">{{ textsState.btnText }}</button>
     </form>
@@ -59,12 +59,10 @@ export default {
       password:null,
     })
 
-    const model = ref(null);
     const numInp = ref(null);
     const warn = ref("");
     const success = ref("");
     let code = null;
-    let emailInDb;
     // yousef.sayed1231@gmail.com
 
     const sendCodeMail = () => {

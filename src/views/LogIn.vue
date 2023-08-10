@@ -6,8 +6,8 @@
       <div class="warn">{{ warn }}</div>
       <div class="success">{{ success }}</div>
       <div class="inpsAndbtns">
-        <input type="text" placeholder="Email" v-model="modelsState.emailModel" />
-        <input type="password" placeholder="Password" v-model="modelsState.passwordModel" />
+        <input type="text" placeholder="Email" v-model.trim="modelsState.emailModel" />
+        <input type="password" placeholder="Password" v-model.trim="modelsState.passwordModel" />
         <button type="submit" @click="logIn">Login</button>
       </div>
       <button @click.prevent="redirectToForgotPass">Forgot password ?</button>
@@ -40,6 +40,7 @@ export default {
     const success = ref("");
 
     const logIn = async (e) => {
+      console.log(modelsState.value.emailModel);
       addClickClass(e)
       try {
         showLoader.value = true;
