@@ -195,6 +195,7 @@ export default {
 
     const addFolderBtn = () => {
       console.log(showPopup.value);
+      dbName = 'Sections';
       showRCCBtnsCb(false);
       showAndHidePopupCb(true);
     };
@@ -213,6 +214,7 @@ export default {
         warn.value = "يجب ادخال الرابط";
         return;
       }
+      console.log('ahhh');
       showAndHidePopupCb(false);
       showRCCBtnsCb(false);
 
