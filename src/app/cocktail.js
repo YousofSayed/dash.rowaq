@@ -663,6 +663,16 @@ export function createFileAs(data, mimeType) {
   }
 }
 
+export function transformToNumInput(e) {
+  e.target.value = e.target.value.split(/\D+/ig).join('')
+}
+
+export function makeAppResponsive(root) {
+  const el = document.querySelector(root);
+  el.style.height = `${window.innerHeight}px`;
+  window.addEventListener('resize',()=> el.style.height = `${window.innerHeight}px`)
+}
+
 //log asynchronous and synchronous
 export async function log(data) {
   try {
@@ -675,8 +685,8 @@ export async function log(data) {
 export function addClickClass(e) {
   const target = e.currentTarget
   target.classList.add('click');
-  target.addEventListener('animationend',()=>{
-  target.classList.remove('click');
+  target.addEventListener('animationend', () => {
+    target.classList.remove('click');
   })
 }
 
@@ -875,13 +885,12 @@ export function encode(text = "string") {
   ];
 
   let encodedCode = [...encodeURIComponent(text)];
-  // for (let i = 0; i < encodedCode.length; i++) { encodedCode[i] = encodedCode[i] + complexChars[i + 3 + 4 + 1] + complexChars[i + 1 + 2] + complexChars[i + 1] + complexChars[i + 5] + complexChars[i] + complexChars[i + 3 + 1] + complexChars[i + 1 + 5]; };
   let reader = new FileReader(), textEncoder = new TextEncoder().encode(encodedCode.join("")), blob = new Blob(textEncoder);
   const myData = new Promise((res, rej) => {
     reader.readAsBinaryString(blob);
     reader.addEventListener('load', () => {
       if (reader.result) {
-        const firstChar = reader.result.slice(0, 3), middleChar = reader.result[Math.trunc(reader.result.length / 2)],lastChar = reader.result.slice(-5);
+        const firstChar = reader.result.slice(0, 3), middleChar = reader.result[Math.trunc(reader.result.length / 2)], lastChar = reader.result.slice(-5);
         const yS7 = (+firstChar + +middleChar + +lastChar) * 700;
         let dataArray = [...yS7.toString()];
 
@@ -928,7 +937,7 @@ export class CocktailDB {
 
       createObjectStore: async (name, request) => {
         request.addEventListener('upgradeneeded', function (ev) {
-          this.result.createObjectStore(name, { keyPath: 'id' })
+          this.result.createObjectStore(name, { keyPath: 'id', autoIncrement: true })
         })
 
         // close request if it seccesded and to if we wanna to create new collection
@@ -956,7 +965,7 @@ export class CocktailDB {
       findHandler: async (name, key, cb = () => { }) => {
         try {
           return await this.handlers.doRequest(async (db) => {
-            let objectStore = db.transaction(name, 'readonly').objectStore(name).getAll();;
+            let objectStore = db.transaction(name, 'readwrite').objectStore(name).getAll();
             let data = await this.handlers.returnData(objectStore), matches = [];
             if (key) {
               data.forEach((val) => {
@@ -991,8 +1000,7 @@ export class CocktailDB {
         try {
           return await this.handlers.doRequest(async (db) => {
             let lastId = await methods.find();
-            console.log(lastId[lastId.length - 1].id);
-            query.id = lastId[lastId.length - 1].id + 1 || 0;
+            query.id = lastId.at(-1) ? lastId[lastId.length - 1].id + 1 : 0;
             db.transaction(name, 'readwrite').objectStore(name).add(query);
             db.close();
           });
@@ -1005,7 +1013,7 @@ export class CocktailDB {
         try {
           if (query instanceof Object && !Object.entries(query)[0]) { throw new Error(`findeOne must not be an empty`) }
           if (typeof query !== typeof {}) { throw new Error(`findeOne key type must not be an object`) }
-          return await this.handlers.findHandler(name, query, (matches) => matches[0])
+          return await this.handlers.findHandler(name, query, matches => matches[0])
         } catch (error) {
           throw new Error(error.message);
         }
@@ -1061,10 +1069,10 @@ export class CocktailDB {
 
       deleteOne: async (query) => {
         try {
-          this.handlers.doRequest(async (db) => {
+          return await this.handlers.doRequest(async (db) => {
             let targetQuery = await methods.findOne(query);
-            console.log(targetQuery);
-            db.transaction(name, 'readwrite').objectStore(name).delete(targetQuery.id)
+            const res = db.transaction(name, 'readwrite').objectStore(name).delete(targetQuery.id);
+            return await methods.find()
           })
         } catch (error) {
           throw new Error(error.message);
@@ -1103,7 +1111,7 @@ export class TelegramBot {
     this.compressURL = async function (fileId) {
       let tinyUrl = `https://tinyurl.com/api-create.php?url=${await this.getFileFromBot(fileId)}`;
       let compresedURl = await (await fetch(tinyUrl)).text();
-      return { compresedURl: compresedURl, id: fileId, ok: true };
+      return { compresedURl: compresedURl,normalUrl:await this.getFileFromBot(fileId) ,id: fileId, ok: true };
     }
     // Base function
 
