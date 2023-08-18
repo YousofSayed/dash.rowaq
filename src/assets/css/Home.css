@@ -212,13 +212,13 @@
 }
 
 
-/* .showMore,
+.showMore,
 .folder,
 .addFolder,
 .video,
 .uploadVideo {
-    align-self: center;
-} */
+    align-self: flex-start;
+}
 
 
 .showMore button {
