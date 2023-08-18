@@ -134,6 +134,7 @@ export default {
     let folderTargeted = null; //For reanme or delete
     let dbName = null; // I know that it by default equal null :)
     //if you know any way to shorhand all of this vars please call me on whatsApp "01120020790" :)
+    //update - i can use # const = localState = ref({allRefs}) #;
 
     const uploadImg = async (blobFileImg) => {
       const res = await tb.sendImage(blobFileImg)

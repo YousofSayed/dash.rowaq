@@ -208,16 +208,17 @@
     text-align: center;
     transition: .4s;
     user-select: none;
+    font-weight: bold;
 }
 
 
-.showMore,
+/* .showMore,
 .folder,
 .addFolder,
 .video,
 .uploadVideo {
     align-self: center;
-}
+} */
 
 
 .showMore button {
